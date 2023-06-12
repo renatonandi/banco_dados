@@ -1,0 +1,31 @@
+--1
+ select c.nome from cliente c 
+ inner join endereco e on e.cod = c.cod_endereco 
+ inner join cidade ci on ci.cod = e.cod_cidade and ci.nome = 'TUBARÃO';
+
+--2
+select c.nome as nome_cliente , p.nome as nome_produto,ca.nome, p.valor, vp.quantidade from cliente c
+inner join venda v on v.cod_cliente = c.cod 
+inner join venda_produto vp on vp.cod_venda = v.cod 
+inner join produto p on p.cod = vp.cod_produto 
+inner join categoria ca on ca.cod = p.cod_categoria 
+where c.nome like '%João%';
+ 
+--3
+select p.nome, c.nome  from produto p 
+right join categoria c on c.cod = p.cod_categoria ;
+
+
+--Relatório de vendas por categoria
+select c.nome, count(*) as vendas from categoria c 
+inner join produto p on p.cod_categoria = c.cod 
+inner join venda_produto vp on vp.cod_produto = p.cod 
+group by c.nome;
+
+--Relatório de produtos com estoque baixo
+select p.nome, p.estoque  from produto p 
+where p.estoque < 10;
+
+--Relatório de venda por mês
+select extract (month from v.data_venda) as mes, count(*) from venda v
+group by mes ;
